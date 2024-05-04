@@ -17,16 +17,16 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3jm-Lt-QmH">
-                        <rect key="frame" x="50" y="7" width="150" height="30"/>
+                        <rect key="frame" x="150" y="7" width="50" height="30"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DQt-Ma-wuv">
-                                <rect key="frame" x="8" y="8" width="134" height="14"/>
+                                <rect key="frame" x="8" y="8" width="34" height="14"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7h1-gc-MzM">
-                                <rect key="frame" x="128" y="19" width="17" height="8"/>
+                                <rect key="frame" x="28" y="19" width="17" height="8"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="6"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -41,7 +41,7 @@
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="cip-xp-5eQ"/>
                             <constraint firstAttribute="trailing" secondItem="DQt-Ma-wuv" secondAttribute="trailing" constant="8" id="hId-TV-CjP"/>
                             <constraint firstItem="DQt-Ma-wuv" firstAttribute="leading" secondItem="3jm-Lt-QmH" secondAttribute="leading" constant="8" id="sf6-Px-wCl"/>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="150" id="uZb-7W-blj"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="uZb-7W-blj"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -54,7 +54,7 @@
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="3jm-Lt-QmH" secondAttribute="trailing" constant="10" id="Ddv-oA-Qhh"/>
                     <constraint firstItem="3jm-Lt-QmH" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="7" id="LRT-W7-pcX"/>
-                    <constraint firstItem="3jm-Lt-QmH" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="30" id="S5d-qw-0sw"/>
+                    <constraint firstItem="3jm-Lt-QmH" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="130" id="S5d-qw-0sw"/>
                     <constraint firstAttribute="bottom" secondItem="3jm-Lt-QmH" secondAttribute="bottom" constant="7" id="hCv-En-2kZ"/>
                 </constraints>
             </tableViewCellContentView>

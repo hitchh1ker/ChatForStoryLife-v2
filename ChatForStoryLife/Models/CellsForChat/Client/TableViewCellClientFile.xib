@@ -37,7 +37,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Op9-Ux-gZv">
-                                <rect key="frame" x="130" y="35" width="17" height="8"/>
+                                <rect key="frame" x="128" y="33" width="17" height="8"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="6"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -49,11 +49,11 @@
                             <constraint firstItem="UlH-xh-HAi" firstAttribute="leading" secondItem="G0n-rc-gVM" secondAttribute="leading" constant="15" id="IkA-Ce-qwH"/>
                             <constraint firstAttribute="height" constant="46" id="K0W-1c-upa"/>
                             <constraint firstAttribute="width" constant="150" id="QYb-eP-lvm"/>
-                            <constraint firstAttribute="bottom" secondItem="Op9-Ux-gZv" secondAttribute="bottom" constant="3" id="SdU-b0-Gdq"/>
+                            <constraint firstAttribute="bottom" secondItem="Op9-Ux-gZv" secondAttribute="bottom" constant="5" id="SdU-b0-Gdq"/>
                             <constraint firstAttribute="bottom" secondItem="UlH-xh-HAi" secondAttribute="bottom" constant="8" id="aWj-Xj-qFn"/>
                             <constraint firstItem="vab-kH-RLz" firstAttribute="top" secondItem="G0n-rc-gVM" secondAttribute="top" constant="15" id="dox-be-Dhf"/>
                             <constraint firstItem="UlH-xh-HAi" firstAttribute="top" secondItem="G0n-rc-gVM" secondAttribute="top" constant="8" id="luA-O5-Kwd"/>
-                            <constraint firstAttribute="trailing" secondItem="Op9-Ux-gZv" secondAttribute="trailing" constant="3" id="qMX-qA-lZd"/>
+                            <constraint firstAttribute="trailing" secondItem="Op9-Ux-gZv" secondAttribute="trailing" constant="5" id="qMX-qA-lZd"/>
                             <constraint firstAttribute="bottom" secondItem="vab-kH-RLz" secondAttribute="bottom" constant="15" id="v9O-Tk-xdH"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
@@ -75,7 +75,7 @@
                 <outlet property="nameFile" destination="vab-kH-RLz" id="ZF3-Te-fjg"/>
                 <outlet property="timestampClient" destination="Op9-Ux-gZv" id="fWk-s1-cfC"/>
             </connections>
-            <point key="canvasLocation" x="9" y="20"/>
+            <point key="canvasLocation" x="7.6335877862595414" y="19.718309859154932"/>
         </tableViewCell>
     </objects>
     <resources>

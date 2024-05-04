@@ -13,6 +13,11 @@
 		414CAED62BA3021E006728A8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 414CAED42BA3021E006728A8 /* Main.storyboard */; };
 		414CAED82BA30220006728A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 414CAED72BA30220006728A8 /* Assets.xcassets */; };
 		414CAEDB2BA30220006728A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 414CAED92BA30220006728A8 /* LaunchScreen.storyboard */; };
+		415CA0212BE63DF800B098DA /* TableViewCellOperatorImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415CA01F2BE63DF800B098DA /* TableViewCellOperatorImage.swift */; };
+		415CA0222BE63DF800B098DA /* TableViewCellOperatorImage.xib in Resources */ = {isa = PBXBuildFile; fileRef = 415CA0202BE63DF800B098DA /* TableViewCellOperatorImage.xib */; };
+		415CA0252BE63E1400B098DA /* TableViewCellOperatorFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415CA0232BE63E1400B098DA /* TableViewCellOperatorFile.swift */; };
+		415CA0262BE63E1400B098DA /* TableViewCellOperatorFile.xib in Resources */ = {isa = PBXBuildFile; fileRef = 415CA0242BE63E1400B098DA /* TableViewCellOperatorFile.xib */; };
+		415CA0282BE63F9100B098DA /* LoadImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415CA0272BE63F9100B098DA /* LoadImage.swift */; };
 		417454192BDA421F00D16310 /* PostAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417454182BDA421F00D16310 /* PostAttachment.swift */; };
 		417D96912BDABBF80053BE42 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 417D96902BDABBF80053BE42 /* Collections */; };
 		417D96942BE0DB400053BE42 /* TableViewCellClientImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417D96922BE0DB400053BE42 /* TableViewCellClientImage.swift */; };
@@ -41,6 +46,11 @@
 		414CAED72BA30220006728A8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		414CAEDA2BA30220006728A8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		414CAEDC2BA30220006728A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		415CA01F2BE63DF800B098DA /* TableViewCellOperatorImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCellOperatorImage.swift; sourceTree = "<group>"; };
+		415CA0202BE63DF800B098DA /* TableViewCellOperatorImage.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableViewCellOperatorImage.xib; sourceTree = "<group>"; };
+		415CA0232BE63E1400B098DA /* TableViewCellOperatorFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCellOperatorFile.swift; sourceTree = "<group>"; };
+		415CA0242BE63E1400B098DA /* TableViewCellOperatorFile.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableViewCellOperatorFile.xib; sourceTree = "<group>"; };
+		415CA0272BE63F9100B098DA /* LoadImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadImage.swift; sourceTree = "<group>"; };
 		417454182BDA421F00D16310 /* PostAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostAttachment.swift; sourceTree = "<group>"; };
 		417D96922BE0DB400053BE42 /* TableViewCellClientImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCellClientImage.swift; sourceTree = "<group>"; };
 		417D96932BE0DB400053BE42 /* TableViewCellClientImage.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableViewCellClientImage.xib; sourceTree = "<group>"; };
@@ -123,7 +133,8 @@
 		4196F2D72BC53CEE00F6F418 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				41A660402BDA49BA00A79E7B /* TimeConverter */,
+				41A6603E2BDA49B300A79E7B /* TimeConverter.swift */,
+				415CA0272BE63F9100B098DA /* LoadImage.swift */,
 				41F68F5D2BD8DDA700FE66E1 /* Message */,
 				4196F2D92BC53D0F00F6F418 /* CellsForChat */,
 			);
@@ -157,16 +168,12 @@
 			children = (
 				4196F2E62BC545E600F6F418 /* TableViewCellOperator.swift */,
 				4196F2E72BC545E600F6F418 /* TableViewCellOperator.xib */,
+				415CA01F2BE63DF800B098DA /* TableViewCellOperatorImage.swift */,
+				415CA0202BE63DF800B098DA /* TableViewCellOperatorImage.xib */,
+				415CA0232BE63E1400B098DA /* TableViewCellOperatorFile.swift */,
+				415CA0242BE63E1400B098DA /* TableViewCellOperatorFile.xib */,
 			);
 			path = Operator;
-			sourceTree = "<group>";
-		};
-		41A660402BDA49BA00A79E7B /* TimeConverter */ = {
-			isa = PBXGroup;
-			children = (
-				41A6603E2BDA49B300A79E7B /* TimeConverter.swift */,
-			);
-			path = TimeConverter;
 			sourceTree = "<group>";
 		};
 		41F68F5D2BD8DDA700FE66E1 /* Message */ = {
@@ -252,9 +259,11 @@
 				414CAEDB2BA30220006728A8 /* LaunchScreen.storyboard in Resources */,
 				414CAED82BA30220006728A8 /* Assets.xcassets in Resources */,
 				41DA30F92BE21C3700310A33 /* TableViewCellClientFile.xib in Resources */,
+				415CA0262BE63E1400B098DA /* TableViewCellOperatorFile.xib in Resources */,
 				4196F2D12BC52F2B00F6F418 /* communication.png in Resources */,
 				414CAED62BA3021E006728A8 /* Main.storyboard in Resources */,
 				417D96952BE0DB400053BE42 /* TableViewCellClientImage.xib in Resources */,
+				415CA0222BE63DF800B098DA /* TableViewCellOperatorImage.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,14 +274,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				415CA0212BE63DF800B098DA /* TableViewCellOperatorImage.swift in Sources */,
 				4196F2E02BC5437D00F6F418 /* TableViewCellClient.swift in Sources */,
 				417D96972BE0EDCB0053BE42 /* GetAttachment.swift in Sources */,
 				417454192BDA421F00D16310 /* PostAttachment.swift in Sources */,
 				414CAED32BA3021E006728A8 /* ViewController.swift in Sources */,
 				4196F2E82BC545E600F6F418 /* TableViewCellOperator.swift in Sources */,
+				415CA0282BE63F9100B098DA /* LoadImage.swift in Sources */,
 				41F68F5F2BD8DEBE00FE66E1 /* GetMessage.swift in Sources */,
 				41A6603F2BDA49B300A79E7B /* TimeConverter.swift in Sources */,
 				414CAECF2BA3021E006728A8 /* AppDelegate.swift in Sources */,
+				415CA0252BE63E1400B098DA /* TableViewCellOperatorFile.swift in Sources */,
 				418CEF422BDA88910012F8E6 /* PostMessage.swift in Sources */,
 				414CAED12BA3021E006728A8 /* SceneDelegate.swift in Sources */,
 				41DA30F82BE21C3700310A33 /* TableViewCellClientFile.swift in Sources */,

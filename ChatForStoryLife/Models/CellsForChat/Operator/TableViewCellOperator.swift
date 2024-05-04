@@ -2,7 +2,6 @@ import UIKit
 
 class TableViewCellOperator: UITableViewCell {
 
-    //@IBOutlet weak var nameOperator: UILabel!
     @IBOutlet weak var textMessageOperator: UILabel!
     @IBOutlet weak var timestampOperator: UILabel!
     

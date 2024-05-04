@@ -108,6 +108,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.register(UINib(nibName: "TableViewCellClientImage", bundle: nil), forCellReuseIdentifier: "TableViewCellClientImage")
         tableView.register(UINib(nibName: "TableViewCellClientFile", bundle: nil), forCellReuseIdentifier: "TableViewCellClientFile")
         tableView.register(UINib(nibName: "TableViewCellOperator", bundle: nil), forCellReuseIdentifier: "TableViewCellOperator")
+        tableView.register(UINib(nibName: "TableViewCellOperatorFile", bundle: nil), forCellReuseIdentifier: "TableViewCellOperatorFile")
+        tableView.register(UINib(nibName: "TableViewCellOperatorImage", bundle: nil), forCellReuseIdentifier: "TableViewCellOperatorImage")
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
     }
@@ -157,11 +159,27 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
             
         } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCellOperator", for: indexPath) as? TableViewCellOperator else {
-                fatalError("Ошибка с ячейкой TableViewCellOperator")
+            if message.attachments!.isEmpty {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCellOperator", for: indexPath) as? TableViewCellOperator else {
+                    fatalError("Ошибка с ячейкой TableViewCellOperator")
+                }
+                cell.setOperatorMessage(m: message)
+                return cell
+            } else {
+                if message.attachments![0].type == "I" {
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCellOperatorImage", for: indexPath) as? TableViewCellOperatorImage else {
+                        fatalError("Ошибка с ячейкой TableViewCellOperatorImage")
+                    }
+                    cell.setImageMessage(m: message, a: message.attachments![0])
+                    return cell
+                } else {
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCellOperatorFile", for: indexPath) as? TableViewCellOperatorFile else {
+                        fatalError("Ошибка с ячейкой TableViewCellOperatorFile")
+                    }
+                    cell.setFileMessage(m: message, a: message.attachments![0])
+                    return cell
+                }
             }
-            cell.setOperatorMessage(m: message)
-            return cell
         }
     }
     
@@ -199,32 +217,32 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBAction func addAttachment(_ sender: Any) {
         let documentPicker = UIDocumentPickerViewController(documentTypes: ["public.content"], in: .import)
         documentPicker.delegate = self
-        documentPicker.allowsMultipleSelection = false
+        documentPicker.allowsMultipleSelection = true
         present(documentPicker, animated: true, completion: nil)
     }
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        guard let url = urls.first else {
-            return
+        for url in urls {
+            let attachmentName = url.lastPathComponent
+            var attachmentType: String
+            
+            if url.pathExtension.lowercased() == "png" || url.pathExtension.lowercased() == "jpg" || url.pathExtension.lowercased() == "jpeg" {
+                attachmentType = "I"
+            } else if url.pathExtension.lowercased() == "txt" || url.pathExtension.lowercased() == "docx" {
+                attachmentType = "D"
+            } else {
+                print("Этот файл не поддерживается")
+                continue
+            }
+            
+            guard let attachmentData = try? Data(contentsOf: url) else {
+                print("Ошибка чтения данных")
+                continue
+            }
+            
+            let data = attachmentData.base64EncodedString()
+            let attachment = PostAttachment(name: attachmentName, type: attachmentType, data: data)
+            attachmentsForSend.append(attachment)
         }
-
-        let attachmentName = url.lastPathComponent
-        var attachmentType: String
-        
-        if url.pathExtension.lowercased() == "png" || url.pathExtension.lowercased() == "jpg" || url.pathExtension.lowercased() == "jpeg" {
-            attachmentType = "I"
-        } else if url.pathExtension.lowercased() == "txt" || url.pathExtension.lowercased() == "docx" {
-            attachmentType = "D"
-        } else {
-            print("Этот файл не поддерживается")
-            return
-        }
-        guard let attachmentData = try? Data(contentsOf: url) else {
-            print("Ошибка чтения данных")
-            return
-        }
-        let data = attachmentData.base64EncodedString()
-        let attachment = PostAttachment(name: attachmentName, type: attachmentType, data: data)
-        attachmentsForSend.append(attachment)
     }
     @IBAction func sendMessage(_ sender: Any) {
         if let messageText = textMessage.text, !messageText.isEmpty {
