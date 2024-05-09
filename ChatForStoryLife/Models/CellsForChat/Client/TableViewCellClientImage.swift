@@ -12,5 +12,8 @@ class TableViewCellClientImage: UITableViewCell {
             }
         }
         self.timestampClient.text = formatMessageTime(m.created)
+        
+        timestampClient.layer.cornerRadius = 4
+        timestampClient.clipsToBounds = true
     }
 }

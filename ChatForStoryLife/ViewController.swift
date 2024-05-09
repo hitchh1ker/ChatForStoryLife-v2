@@ -10,7 +10,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     private var messages: [GetMessage] = []
     
-    private var attachmentsForSend: [PostAttachment] = []
+    private var attachmentsForPost: [PostAttachment] = []
     
     private var socket: WebSocket!
     
@@ -57,11 +57,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             attachments.append(attachment)
                         }
                     }
-                    
                     let newMessage = GetMessage(content: content, sender: sender, created: created, attachments: attachments)
                     self.messages.append(newMessage)
                 }
-                
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                     if !self.messages.isEmpty {
@@ -73,10 +71,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }.resume()
     }
-    
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -86,7 +80,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         self.tableView.addSubview(refreshControl)
         reload()
-        
     }
     func connectWebSocket(){
         let url = URL(string: "wss://dev.andalex.biz/sklad/api/support/chat")!
@@ -134,7 +127,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let message = messages.reversed()[indexPath.row]
         if message.sender == "CLIENT" {
-            
             if message.attachments!.isEmpty {
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCellClient", for: indexPath) as? TableViewCellClient else {
                     fatalError("Ошибка с ячейкой TableViewCellClient")
@@ -157,7 +149,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     return cell
                 }
             }
-            
         } else {
             if message.attachments!.isEmpty {
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCellOperator", for: indexPath) as? TableViewCellOperator else {
@@ -195,8 +186,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 self.reload()
             }
         case .ping(_):
+            DispatchQueue.main.async {
+                self.reload()
+            }
             break
         case .pong(_):
+            DispatchQueue.main.async {
+                self.reload()
+            }
             break
         case .viabilityChanged(_):
             break
@@ -241,7 +238,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             
             let data = attachmentData.base64EncodedString()
             let attachment = PostAttachment(name: attachmentName, type: attachmentType, data: data)
-            attachmentsForSend.append(attachment)
+            attachmentsForPost.append(attachment)
         }
     }
     @IBAction func sendMessage(_ sender: Any) {
@@ -258,8 +255,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 print("Ошибка при кодировании сообщения:", error)
             }
         }
-        if textMessage.text!.isEmpty && !attachmentsForSend.isEmpty {
-            for attachment in attachmentsForSend {
+        if textMessage.text!.isEmpty && !attachmentsForPost.isEmpty {
+            for attachment in attachmentsForPost {
                 let messagePOST = PostMessage(message: "", supportinfo: "", attachments: [attachment])
                 do {
                     let jsonData = try JSONEncoder().encode(messagePOST)
@@ -273,7 +270,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     print("Ошибка при кодировании сообщения с вложением:", error)
                 }
             }
-            attachmentsForSend = []
+            attachmentsForPost = []
         }
     }
 }

@@ -32,10 +32,11 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1MH-4g-i2o">
-                                <rect key="frame" x="182" y="140" width="20" height="8"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1MH-4g-i2o">
+                                <rect key="frame" x="182" y="138" width="20" height="10"/>
+                                <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="8" id="EVj-RR-oEf"/>
+                                    <constraint firstAttribute="height" constant="10" id="EVj-RR-oEf"/>
                                     <constraint firstAttribute="width" constant="20" id="fF8-MS-QNp"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="6"/>

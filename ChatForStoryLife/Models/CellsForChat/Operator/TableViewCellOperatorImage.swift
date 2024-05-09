@@ -13,5 +13,8 @@ class TableViewCellOperatorImage: UITableViewCell {
             }
         }
         self.timestampOper.text = formatMessageTime(m.created)
+        
+        timestampOper.layer.cornerRadius = 4
+        timestampOper.clipsToBounds = true
     }
 }
