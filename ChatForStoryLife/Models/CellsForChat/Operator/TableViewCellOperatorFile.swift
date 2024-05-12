@@ -1,7 +1,7 @@
 import UIKit
 
 class TableViewCellOperatorFile: UITableViewCell {
-
+    
     @IBOutlet weak var nameFile: UILabel!
     
     @IBOutlet weak var timestampOper: UILabel!
@@ -10,55 +10,18 @@ class TableViewCellOperatorFile: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(downloadFile))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         self.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc private func downloadFile() {
-        guard let fileURLString = fileURL, let fileURL = URL(string: fileURLString) else {
-            print("Ошибка в ссылке URL")
-            return
-        }
-        URLSession.shared.downloadTask(with: fileURL) { (location, response, error) in
-            guard let location = location else {
-                if let error = error {
-                    print("Ошибка при скачивании файла: \(error)")
-                } else {
-                    print("Ошибка при скачивании файла")
-                }
-                return
-            }
-            
-            guard let projectDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-                print("Failed to access project directory")
-                return
-            }
-
-            let downloadsDirectory = projectDirectory.appendingPathComponent("Downloads")
-
-            do {
-                try FileManager.default.createDirectory(at: downloadsDirectory, withIntermediateDirectories: true, attributes: nil)
-            } catch {
-                print("Failed to create downloads directory:", error)
-                return
-            }
-
-            let destinationURL = downloadsDirectory.appendingPathComponent(fileURL.lastPathComponent)
-            
-            do {
-                try FileManager.default.moveItem(at: location, to: destinationURL)
-                print("Файл успешно скачан по пути: \(destinationURL)")
-                
-            } catch {
-                print("Ошибка при сохранении файла: \(error)")
-            }
-        }.resume()
     }
     
     func setFileMessage(m: GetMessage, a: GetAttachment){
         nameFile.text = a.name
         timestampOper.text = formatMessageTime(m.created)
         fileURL = a.url
+    }
+    
+    @objc private func handleTap(_ sender: UITapGestureRecognizer) {
+        downloadFile(fileURL: fileURL)
     }
     
 }

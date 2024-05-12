@@ -106,7 +106,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
     }
-    
     func setupNavBar() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
@@ -120,7 +119,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return messages.count
     }
@@ -173,7 +171,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
     }
-    
     func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
         switch event {
         case .connected(let headers):
@@ -210,7 +207,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             print("WebSocker закрыл подключение:")
         }
     }
-    
     @IBAction func addAttachment(_ sender: Any) {
         let documentPicker = UIDocumentPickerViewController(documentTypes: ["public.content"], in: .import)
         documentPicker.delegate = self
@@ -219,26 +215,33 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         for url in urls {
-            let attachmentName = url.lastPathComponent
-            var attachmentType: String
-            
-            if url.pathExtension.lowercased() == "png" || url.pathExtension.lowercased() == "jpg" || url.pathExtension.lowercased() == "jpeg" {
-                attachmentType = "I"
-            } else if url.pathExtension.lowercased() == "txt" || url.pathExtension.lowercased() == "docx" {
-                attachmentType = "D"
+            if urls.count <= 4 {
+                let attachmentName = url.lastPathComponent
+                var attachmentType: String
+                
+                if url.pathExtension.lowercased() == "png" || url.pathExtension.lowercased() == "jpg" || url.pathExtension.lowercased() == "jpeg" {
+                    attachmentType = "I"
+                } else if url.pathExtension.lowercased() == "txt" || url.pathExtension.lowercased() == "docx" {
+                    attachmentType = "D"
+                } else {
+                    print("Этот файл не поддерживается")
+                    continue
+                }
+                
+                guard let attachmentData = try? Data(contentsOf: url) else {
+                    print("Ошибка чтения данных")
+                    continue
+                }
+                
+                let data = attachmentData.base64EncodedString()
+                let attachment = PostAttachment(name: attachmentName, type: attachmentType, data: data)
+                attachmentsForPost.append(attachment)
             } else {
-                print("Этот файл не поддерживается")
-                continue
+                let alert = UIAlertController(title: "Ошибка", message: "Вы выбрали более 4 файлов", preferredStyle: .alert)
+                self.present(alert, animated: true)
+                
+                alert.dismiss(animated: true)
             }
-            
-            guard let attachmentData = try? Data(contentsOf: url) else {
-                print("Ошибка чтения данных")
-                continue
-            }
-            
-            let data = attachmentData.base64EncodedString()
-            let attachment = PostAttachment(name: attachmentName, type: attachmentType, data: data)
-            attachmentsForPost.append(attachment)
         }
     }
     @IBAction func sendMessage(_ sender: Any) {

@@ -1,6 +1,6 @@
 import Foundation
 
-public func downloadFile() {
+func downloadFile(fileURL: String?) {
     guard let fileURLString = fileURL, let fileURL = URL(string: fileURLString) else {
         print("Ошибка в ссылке URL")
         return
