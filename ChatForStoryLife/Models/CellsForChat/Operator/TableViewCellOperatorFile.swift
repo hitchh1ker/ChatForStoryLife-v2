@@ -21,7 +21,7 @@ class TableViewCellOperatorFile: UITableViewCell {
     }
     
     @objc private func handleTap(_ sender: UITapGestureRecognizer) {
-        downloadFile(fileURL: fileURL)
+        print("test")
     }
     
 }

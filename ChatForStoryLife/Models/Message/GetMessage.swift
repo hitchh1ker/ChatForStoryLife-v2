@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-public class GetMessage : Codable {
+struct GetMessage : Decodable {
     public var content: String
     public var sender: String
     public var created: Int

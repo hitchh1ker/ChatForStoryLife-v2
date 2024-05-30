@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-public class PostAttachment : Codable {
+struct PostAttachment : Codable {
     public var name: String
     public var type: String
     public var data: String

@@ -1,6 +1,6 @@
 import Foundation
 
-public class GetAttachment : Codable {
+struct GetAttachment : Decodable {
     public var url: String
     public var name: String
     public var type: String

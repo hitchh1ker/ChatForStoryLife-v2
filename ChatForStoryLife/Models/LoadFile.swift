@@ -1,42 +1,44 @@
-import Foundation
+import UIKit
+import MobileCoreServices
 
-func downloadFile(fileURL: String?) {
-    guard let fileURLString = fileURL, let fileURL = URL(string: fileURLString) else {
-        print("Ошибка в ссылке URL")
-        return
+class LoadFile: NSObject {
+    private weak var viewController: UIViewController?
+    
+    init(viewController: UIViewController) {
+        self.viewController = viewController
     }
-    URLSession.shared.downloadTask(with: fileURL) { (location, response, error) in
-        guard let location = location else {
-            if let error = error {
-                print("Ошибка при скачивании файла: \(error)")
-            } else {
-                print("Ошибка при скачивании файла")
+    
+    func downloadAndSaveFile(fileURL: String) {
+        guard let url = URL(string: fileURL) else {
+            print("Ошибка в URL: \(fileURL)")
+            return
+        }
+        
+        URLSession.shared.downloadTask(with: url) { (location, response, error) in
+            guard let location = location else {
+                if let error = error {
+                    print("Ошибка скачивания: \(error)")
+                } else {
+                    print("Локация скачивания пуста")
+                }
+                return
             }
-            return
-        }
-        
-        guard let projectDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            print("Failed to access project directory")
-            return
-        }
+            DispatchQueue.main.async {
+                let documentPicker = UIDocumentPickerViewController(forExporting: [location])
+                documentPicker.delegate = self
+                documentPicker.modalPresentationStyle = .fullScreen
+                self.viewController?.present(documentPicker, animated: true, completion: nil)
+            }
+        }.resume()
+    }
+}
 
-        let downloadsDirectory = projectDirectory.appendingPathComponent("Downloads")
+extension LoadFile: UIDocumentPickerDelegate {
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        print("Документы выбраны: \(urls)")
+    }
 
-        do {
-            try FileManager.default.createDirectory(at: downloadsDirectory, withIntermediateDirectories: true, attributes: nil)
-        } catch {
-            print("Failed to create downloads directory:", error)
-            return
-        }
-
-        let destinationURL = downloadsDirectory.appendingPathComponent(fileURL.lastPathComponent)
-        
-        do {
-            try FileManager.default.moveItem(at: location, to: destinationURL)
-            print("Файл успешно скачан по пути: \(destinationURL)")
-            
-        } catch {
-            print("Ошибка при сохранении файла: \(error)")
-        }
-    }.resume()
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        print("Выбор отменен")
+    }
 }

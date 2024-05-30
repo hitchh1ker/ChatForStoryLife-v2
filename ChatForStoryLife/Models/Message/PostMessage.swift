@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-public class PostMessage : Codable {
+struct PostMessage : Codable {
     
     public var message: String
     public var supportinfo: String
