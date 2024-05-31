@@ -16,7 +16,7 @@ class StartController: UIViewController {
     }
     
     private func getUnreadCount() {
-        let url = URL(string: "https://dev.andalex.biz/sklad/api/support/message/unreaded")!
+        let url = URL(string: Consts.urlGetUnreadMessage)!
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue(device, forHTTPHeaderField: "Device-Uid")
@@ -70,7 +70,7 @@ class StartController: UIViewController {
         present(vc, animated:  true)
         
         
-        let url = URL(string: "https://dev.andalex.biz/sklad/api/support/message/read")!
+        let url = URL(string: Consts.urlReadMessage)!
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
         request.addValue(device, forHTTPHeaderField: "Device-Uid")

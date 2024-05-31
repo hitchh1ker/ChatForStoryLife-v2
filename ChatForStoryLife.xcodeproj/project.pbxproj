@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		410083052C07327F0020D2A6 /* GetOperatorMessageSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410083042C07327F0020D2A6 /* GetOperatorMessageSocket.swift */; };
+		410083082C08C49E0020D2A6 /* SectionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410083072C08C49E0020D2A6 /* SectionMessage.swift */; };
+		4100830B2C08C5470020D2A6 /* HeaderDataSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410083092C08C5470020D2A6 /* HeaderDataSection.swift */; };
+		4100830C2C08C5470020D2A6 /* HeaderDataSection.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4100830A2C08C5470020D2A6 /* HeaderDataSection.xib */; };
+		4100830E2C09E6D80020D2A6 /* Consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4100830D2C09E6D80020D2A6 /* Consts.swift */; };
 		410DC76C2BF10F7D001F5743 /* LoadFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410DC76B2BF10F7D001F5743 /* LoadFile.swift */; };
 		410DC76E2C0319F8001F5743 /* GetMessageSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410DC76D2C0319F8001F5743 /* GetMessageSocket.swift */; };
 		410DC7702C031AB1001F5743 /* MessageDataSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410DC76F2C031AB1001F5743 /* MessageDataSocket.swift */; };
@@ -46,6 +50,10 @@
 
 /* Begin PBXFileReference section */
 		410083042C07327F0020D2A6 /* GetOperatorMessageSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetOperatorMessageSocket.swift; sourceTree = "<group>"; };
+		410083072C08C49E0020D2A6 /* SectionMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionMessage.swift; sourceTree = "<group>"; };
+		410083092C08C5470020D2A6 /* HeaderDataSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderDataSection.swift; sourceTree = "<group>"; };
+		4100830A2C08C5470020D2A6 /* HeaderDataSection.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HeaderDataSection.xib; sourceTree = "<group>"; };
+		4100830D2C09E6D80020D2A6 /* Consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consts.swift; sourceTree = "<group>"; };
 		410DC76B2BF10F7D001F5743 /* LoadFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadFile.swift; sourceTree = "<group>"; };
 		410DC76D2C0319F8001F5743 /* GetMessageSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMessageSocket.swift; sourceTree = "<group>"; };
 		410DC76F2C031AB1001F5743 /* MessageDataSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDataSocket.swift; sourceTree = "<group>"; };
@@ -95,6 +103,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		410083062C08C4860020D2A6 /* Section */ = {
+			isa = PBXGroup;
+			children = (
+				410083072C08C49E0020D2A6 /* SectionMessage.swift */,
+			);
+			path = Section;
+			sourceTree = "<group>";
+		};
 		414CAEC22BA3021E006728A8 = {
 			isa = PBXGroup;
 			children = (
@@ -123,6 +139,7 @@
 				41BD29D82C039E4700870966 /* StartController.swift */,
 				414CAED72BA30220006728A8 /* Assets.xcassets */,
 				414CAED92BA30220006728A8 /* LaunchScreen.storyboard */,
+				4100830D2C09E6D80020D2A6 /* Consts.swift */,
 				414CAEDC2BA30220006728A8 /* Info.plist */,
 			);
 			path = ChatForStoryLife;
@@ -149,10 +166,10 @@
 		4196F2D72BC53CEE00F6F418 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				41D36CFB2C03A88300134F97 /* Response */,
+				410DC76B2BF10F7D001F5743 /* LoadFile.swift */,
 				41A6603E2BDA49B300A79E7B /* TimeConverter.swift */,
 				415CA0272BE63F9100B098DA /* LoadImage.swift */,
-				410DC76B2BF10F7D001F5743 /* LoadFile.swift */,
+				41D36CFB2C03A88300134F97 /* Response */,
 				41F68F5D2BD8DDA700FE66E1 /* Message */,
 				4196F2D92BC53D0F00F6F418 /* CellsForChat */,
 			);
@@ -164,6 +181,8 @@
 			children = (
 				4196F2E52BC5456C00F6F418 /* Operator */,
 				4196F2E42BC5455800F6F418 /* Client */,
+				410083092C08C5470020D2A6 /* HeaderDataSection.swift */,
+				4100830A2C08C5470020D2A6 /* HeaderDataSection.xib */,
 			);
 			path = CellsForChat;
 			sourceTree = "<group>";
@@ -205,6 +224,7 @@
 		41F68F5D2BD8DDA700FE66E1 /* Message */ = {
 			isa = PBXGroup;
 			children = (
+				410083062C08C4860020D2A6 /* Section */,
 				41F68F5E2BD8DEBE00FE66E1 /* GetMessage.swift */,
 				417454182BDA421F00D16310 /* PostAttachment.swift */,
 				418CEF412BDA88910012F8E6 /* PostMessage.swift */,
@@ -290,6 +310,7 @@
 				41BD29D72C039C1E00870966 /* Start.storyboard in Resources */,
 				415CA0262BE63E1400B098DA /* TableViewCellOperatorFile.xib in Resources */,
 				414CAED62BA3021E006728A8 /* Main.storyboard in Resources */,
+				4100830C2C08C5470020D2A6 /* HeaderDataSection.xib in Resources */,
 				417D96952BE0DB400053BE42 /* TableViewCellClientImage.xib in Resources */,
 				415CA02D2BEE5B7E00B098DA /* communication.png in Resources */,
 				415CA02F2BEE5B8A00B098DA /* bar.png in Resources */,
@@ -305,6 +326,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				41BD29D92C039E4700870966 /* StartController.swift in Sources */,
+				4100830E2C09E6D80020D2A6 /* Consts.swift in Sources */,
 				415CA0212BE63DF800B098DA /* TableViewCellOperatorImage.swift in Sources */,
 				4196F2E02BC5437D00F6F418 /* TableViewCellClient.swift in Sources */,
 				417D96972BE0EDCB0053BE42 /* GetAttachment.swift in Sources */,
@@ -316,6 +338,7 @@
 				415CA0282BE63F9100B098DA /* LoadImage.swift in Sources */,
 				41F68F5F2BD8DEBE00FE66E1 /* GetMessage.swift in Sources */,
 				41D36CFD2C03A89C00134F97 /* UnreadCountResponse.swift in Sources */,
+				4100830B2C08C5470020D2A6 /* HeaderDataSection.swift in Sources */,
 				41A6603F2BDA49B300A79E7B /* TimeConverter.swift in Sources */,
 				410DC76C2BF10F7D001F5743 /* LoadFile.swift in Sources */,
 				414CAECF2BA3021E006728A8 /* AppDelegate.swift in Sources */,
@@ -323,6 +346,7 @@
 				410083052C07327F0020D2A6 /* GetOperatorMessageSocket.swift in Sources */,
 				418CEF422BDA88910012F8E6 /* PostMessage.swift in Sources */,
 				414CAED12BA3021E006728A8 /* SceneDelegate.swift in Sources */,
+				410083082C08C49E0020D2A6 /* SectionMessage.swift in Sources */,
 				41DA30F82BE21C3700310A33 /* TableViewCellClientFile.swift in Sources */,
 				417D96942BE0DB400053BE42 /* TableViewCellClientImage.swift in Sources */,
 			);

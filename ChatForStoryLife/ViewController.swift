@@ -1,16 +1,19 @@
 import UIKit
 import Starscream
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIDocumentPickerDelegate {
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var textMessage: UITextField!
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIDocumentPickerDelegate, UITextViewDelegate {
     
-    private var device: String = "testAuthDevice3"
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var textMessage: UITextView!
+    
     private var messages: [GetMessage] = []
+    private var sections: [SectionMessage] = []
     private var attachmentsForPost: [PostAttachment] = []
     private var socket: WebSocket!
     private let refreshControl = UIRefreshControl()
-    private var count: Int = 15
+    
+    private var page: Int = 1
+    private var count: Int = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,12 +23,28 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         setupTableView()
         connectWebSocket()
         fetchMessages()
+        
+        textMessage.delegate = self
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Напишите сообщение..."
+            textView.textColor = UIColor.lightGray
+        }
     }
     
     func connectWebSocket() {
-        let url = URL(string: "wss://dev.andalex.biz/sklad/api/support/chat")!
+        let url = URL(string: Consts.urlSocket)!
         var request = URLRequest(url: url)
-        request.addValue(device, forHTTPHeaderField: "Device-Uid")
+        request.addValue(Consts.device, forHTTPHeaderField: "Device-Uid")
         request.timeoutInterval = 5
         socket = WebSocket(request: request, certPinner: FoundationSecurity(), compressionHandler: nil)
         socket.delegate = self
@@ -38,6 +57,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44.0
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        
         tableView.contentInset = UIEdgeInsets(top: tableView.bounds.height, left: 0, bottom: 0, right: 0)
         
         tableView.register(UINib(nibName: "TableViewCellClient", bundle: nil), forCellReuseIdentifier: "TableViewCellClient")
@@ -46,6 +66,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.register(UINib(nibName: "TableViewCellOperator", bundle: nil), forCellReuseIdentifier: "TableViewCellOperator")
         tableView.register(UINib(nibName: "TableViewCellOperatorFile", bundle: nil), forCellReuseIdentifier: "TableViewCellOperatorFile")
         tableView.register(UINib(nibName: "TableViewCellOperatorImage", bundle: nil), forCellReuseIdentifier: "TableViewCellOperatorImage")
+        tableView.register(UINib(nibName: "HeaderDataSection", bundle: nil), forCellReuseIdentifier: "HeaderDataSection")
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
     }
@@ -77,10 +98,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     private func fetchMessages() {
-        let url = URL(string: "https://dev.andalex.biz/sklad/api/support/message?Page=1&Count=\(count)")!
+        let url = URL(string: "\(Consts.urlGetMessage)?Page=\(page)&Count=\(count)")!
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.addValue(device, forHTTPHeaderField: "Device-Uid")
+        request.addValue(Consts.device, forHTTPHeaderField: "Device-Uid")
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             self.handleResponse(data: data, error: error)
@@ -99,6 +120,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             print("Ошибка JSON:", error)
         }
     }
+    
     private func updateMessages(with messageArray: [GetMessage]) {
         self.messages = messageArray.map { message in
             let attachments = message.attachments?.map { attachment in
@@ -106,68 +128,108 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             } ?? []
             return GetMessage(content: message.content, sender: message.sender, created: message.created, attachments: attachments)
         }
+        messages.reverse()
+        groupMessagesByDate()
         
         DispatchQueue.main.async {
-            self.messages.reverse()
             self.tableView.reloadData()
+            self.scrollToBottom()
         }
+    }
+    
+    private func groupMessagesByDate() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .none
+        dateFormatter.locale = Locale(identifier: "ru_RU")
+        
+        var groupedMessages: [String: [GetMessage]] = [:]
+        
+        for message in messages {
+            let date = Date(timeIntervalSince1970: TimeInterval(message.created))
+            let dateString = dateFormatter.string(from: date)
+            
+            if groupedMessages[dateString] == nil {
+                groupedMessages[dateString] = []
+            }
+            groupedMessages[dateString]?.append(message)
+        }
+        sections = groupedMessages.map { SectionMessage(date: $0.key, messages: $0.value) }
+        sections.sort { $0.date < $1.date }
     }
     
     private func scrollToBottom() {
-        if !self.messages.isEmpty {
-            self.tableView.scrollToRow(at: IndexPath(row: self.messages.count - 1, section: 0), at: .bottom, animated: true)
+        if !self.sections.isEmpty, !self.sections.last!.messages.isEmpty {
+            let lastSectionIndex = self.sections.count - 1
+            let lastRowIndex = self.sections[lastSectionIndex].messages.count - 1
+            self.tableView.scrollToRow(at: IndexPath(row: lastRowIndex, section: lastSectionIndex), at: .bottom, animated: true)
         }
     }
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return sections.count
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return messages.count
+        return sections[section].messages.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let message = messages[indexPath.row]
-        if message.sender == "CLIENT" {
-            if message.attachments?.isEmpty ?? true {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCellClient", for: indexPath) as? TableViewCellClient else {
-                    fatalError("Ошибка с ячейкой TableViewCellClient")
-                }
-                cell.setClientMessage(m: message)
-                return cell
-            } else {
-                if message.attachments?.first?.type == "I" {
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCellClientImage", for: indexPath) as? TableViewCellClientImage else {
-                        fatalError("Ошибка с ячейкой TableViewCellClientImage")
-                    }
-                    cell.setImageMessage(m: message, a: message.attachments!.first!)
-                    return cell
-                } else {
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCellClientFile", for: indexPath) as? TableViewCellClientFile else {
-                        fatalError("Ошибка с ячейкой TableViewCellClientFile")
-                    }
-                    cell.setFileMessage(m: message, a: message.attachments!.first!, viewController: self)
-                    cell.selectionStyle = .blue
-                    return cell
-                }
+        let section = sections[indexPath.section]
+        
+        if indexPath.row == 0 {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "HeaderDataSection", for: indexPath) as? HeaderDataSection else {
+                fatalError("Ошибка с ячейкой HeaderDataSection")
             }
+            cell.dataLabel.text = section.date
+            return cell
         } else {
-            if message.attachments?.isEmpty ?? true {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCellOperator", for: indexPath) as? TableViewCellOperator else {
-                    fatalError("Ошибка с ячейкой TableViewCellOperator")
-                }
-                cell.setOperatorMessage(m: message)
-                return cell
-            } else {
-                if message.attachments?.first?.type == "I" {
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCellOperatorImage", for: indexPath) as? TableViewCellOperatorImage else {
-                        fatalError("Ошибка с ячейкой TableViewCellOperatorImage")
+            let message = section.messages[indexPath.row - 1]
+            
+            if message.sender == "CLIENT" {
+                if message.attachments?.isEmpty ?? true {
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCellClient", for: indexPath) as? TableViewCellClient else {
+                        fatalError("Ошибка с ячейкой TableViewCellClient")
                     }
-                    cell.setImageMessage(m: message, a: message.attachments!.first!)
+                    cell.setClientMessage(m: message)
                     return cell
                 } else {
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCellOperatorFile", for: indexPath) as? TableViewCellOperatorFile else {
-                        fatalError("Ошибка с ячейкой TableViewCellOperatorFile")
+                    if message.attachments?.first?.type == "I" {
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCellClientImage", for: indexPath) as? TableViewCellClientImage else {
+                            fatalError("Ошибка с ячейкой TableViewCellClientImage")
+                        }
+                        cell.setImageMessage(m: message, a: message.attachments!.first!)
+                        return cell
+                    } else {
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCellClientFile", for: indexPath) as? TableViewCellClientFile else {
+                            fatalError("Ошибка с ячейкой TableViewCellClientFile")
+                        }
+                        cell.setFileMessage(m: message, a: message.attachments!.first!, viewController: self)
+                        cell.selectionStyle = .blue
+                        return cell
                     }
-                    cell.setFileMessage(m: message, a: message.attachments!.first!)
+                }
+            } else {
+                if message.attachments?.isEmpty ?? true {
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCellOperator", for: indexPath) as? TableViewCellOperator else {
+                        fatalError("Ошибка с ячейкой TableViewCellOperator")
+                    }
+                    cell.setOperatorMessage(m: message)
                     return cell
+                } else {
+                    if message.attachments?.first?.type == "I" {
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCellOperatorImage", for: indexPath) as? TableViewCellOperatorImage else {
+                            fatalError("Ошибка с ячейкой TableViewCellOperatorImage")
+                        }
+                        cell.setImageMessage(m: message, a: message.attachments!.first!)
+                        return cell
+                    } else {
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCellOperatorFile", for: indexPath) as? TableViewCellOperatorFile else {
+                            fatalError("Ошибка с ячейкой TableViewCellOperatorFile")
+                        }
+                        cell.setFileMessage(m: message, a: message.attachments!.first!)
+                        return cell
+                    }
                 }
             }
         }
@@ -187,11 +249,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         for url in urls {
-            if urls.count > 5 {
-                self.alert(Title: "Максимум 5 файлов", Message: "Максимальное количество файлов для отправки: 5")
+            if urls.count > 10 {
+                self.alert(Title: "Максимум 10 файлов", Message: "Максимальное количество файлов для отправки: 5")
                 return
             }
-            
             let fileName = url.lastPathComponent
             let fileExtension = url.pathExtension
             let type = checkType(ext: fileExtension)
@@ -199,7 +260,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 self.alert(Title: "Файл не поддерживается", Message: "Выбранный файл не поддерживается")
                 return
             }
-            
             if let fileData = try? Data(contentsOf: url) {
                 let base64String = fileData.base64EncodedString()
                 let attachment = PostAttachment(name: fileName, type: type, data: base64String)
@@ -279,13 +339,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         } else {
             print("Ошибка при обработке входящего сообщения: данные не соответствуют ожидаемому формату")
         }
+        groupMessagesByDate()
         DispatchQueue.main.async {
             self.tableView.reloadData()
             self.scrollToBottom()
         }
-        
     }
 }
+
 extension ViewController: WebSocketDelegate {
     func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
         switch event {
@@ -294,7 +355,7 @@ extension ViewController: WebSocketDelegate {
         case .disconnected(let reason, let code):
             print("WebSocket отключён:", reason, code)
         case .text(let string):
-            print("Полученные данные::", string)
+            print("Полученные данные:", string)
             handleIncomingMessage(string)
         case .ping(_):
             break
